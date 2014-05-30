@@ -3,8 +3,6 @@
 
 #include "Comm.h"
 
-#include <Servo.h>
-
 #define CONTROLLER_ARM_COUNT 4
 //defined in Core.cpp
 extern const int armConfig[CONTROLLER_ARM_COUNT][6];

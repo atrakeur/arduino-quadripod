@@ -1,8 +1,10 @@
 #ifndef CORE_H_INCLUDED
 #define CORE_H_INCLUDED
 
-#include "Comm.h"
-#include "Controller.h"
+#include <Servo.h>
+
+#include "Systems/Comm.h"
+#include "Systems/Controller.h"
 
 class Core {
 public:
