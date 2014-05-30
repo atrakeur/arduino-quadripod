@@ -21,9 +21,20 @@ Command* Comm::recvCommand()
 {
 	while(Serial.available() > 0) 
 	{
-		char data = (char) Serial.read();
-		
-		if (data == '\n') 
+		int remSpace = COMM_COMMAND_BUFF - inputUsed;
+		if (remSpace <= 0)
+		{
+			//invalidate command
+			Comm::sendCommand(COMM_ERROR_STR, COMM_ERROR_STR_BUFFLEN);
+			Comm::resetInputCommand();
+			//TODO discard overflow data?
+			return NULL;
+		}
+
+		char data = (char)Serial.read();
+		Serial.print(data);
+
+		if (data == '\n' || data == '\r') 
 		{
 			//locate the delimiter
 			int delimiter = -1;
@@ -49,11 +60,11 @@ Command* Comm::recvCommand()
 			strncpy(input.val, &inputBuff[delimiter + 1], inputUsed - delimiter - 1);
 			input.val[inputUsed - delimiter - 1] = '\0';
 
-			Serial.print("Received: ");
+			Serial.print("Received: '");
 			Serial.print(input.key);
-			Serial.print(" with ");
+			Serial.print("' with '");
 			Serial.print(input.val);
-			Serial.println(" Done");
+			Serial.println("' Done");
 
 			Comm::resetInputCommand();
 			
@@ -61,15 +72,6 @@ Command* Comm::recvCommand()
 		}
 		else
 		{
-			if (inputUsed >= COMM_COMMAND_KEY + COMM_COMMAND_VAL) 
-			{
-				//invalidate command
-				Comm::sendCommand(COMM_ERROR_STR, COMM_ERROR_STR_BUFFLEN);
-				Comm::resetInputCommand();
-				//TODO discard overflow data?
-				return NULL;
-			}
-
 			inputBuff[inputUsed++] = data;
 		}
 	}

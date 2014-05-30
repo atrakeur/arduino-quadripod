@@ -15,6 +15,8 @@ private:
 public:
     void init();
     void loop();
+
+    void parseControlCommand(Command* cmd);
 };
 
 #endif // CORE_H_INCLUDED

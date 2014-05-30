@@ -3,6 +3,7 @@
 
 #define COMM_COMMAND_KEY 32
 #define COMM_COMMAND_VAL 32
+#define COMM_COMMAND_BUFF COMM_COMMAND_KEY + COMM_COMMAND_VAL
 
 extern const char COMM_ERROR_STR[];
 
@@ -13,7 +14,8 @@ extern const char COMM_ERROR_STR_BUFFLEN[];
 
 /* Controller errors */
 extern const char COMM_ERROR_ARM_COUNT[];
-extern const char COMM_ERROR_ARM_DEFIN[];
+extern const char COMM_ERROR_ARM_NOTDEFINED[];
+extern const char COMM_ERROR_ARM_WRONGPOS[];
 
 typedef struct Command {
 	char key[COMM_COMMAND_KEY];
@@ -26,7 +28,7 @@ public:
 private:
 	Command input;
 	int inputUsed;
-	char inputBuff[COMM_COMMAND_KEY + COMM_COMMAND_VAL];
+	char inputBuff[COMM_COMMAND_BUFF];
 public:
 	void init();
 
