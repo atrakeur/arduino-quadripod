@@ -1,14 +1,13 @@
-#define LED_PIN 13
+#include "Core.h"
+
+Core core;
 
 void setup()
 {
-    pinMode(LED_PIN, OUTPUT);
+    core.init();
 }
 
 void loop()
 {
-    digitalWrite(LED_PIN, HIGH);
-    delay(100);
-    digitalWrite(LED_PIN, LOW);
-    delay(100);
+    core.loop();
 }
