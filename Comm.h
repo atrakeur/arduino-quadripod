@@ -5,9 +5,15 @@
 #define COMM_COMMAND_VAL 32
 
 extern const char COMM_ERROR_STR[];
+
+/* Comm errors */
 extern const char COMM_ERROR_STR_NOERROR[];
 extern const char COMM_ERROR_STR_NODELIM[];
 extern const char COMM_ERROR_STR_BUFFLEN[];
+
+/* Controller errors */
+extern const char COMM_ERROR_ARM_COUNT[];
+extern const char COMM_ERROR_ARM_DEFIN[];
 
 typedef struct Command {
 	char key[COMM_COMMAND_KEY];
@@ -25,7 +31,8 @@ public:
 	void init();
 
 	Command* recvCommand();
-	void sendCommand(const char* key, const char* value);
+	void sendCommand(const char* key, const char* value, ...);
+	void sendError(const char* value, ...);
 	void resetInputCommand();
 };
 

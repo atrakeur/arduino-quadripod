@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "Arduino.h"
 
 #include "Comm.h"
@@ -75,13 +77,31 @@ Command* Comm::recvCommand()
 	return NULL;
 }
 
-void Comm::sendCommand(const char* key, const char* val) 
+void Comm::sendCommand(const char* key, const char* val, ...) 
 {
+	char buff[COMM_COMMAND_VAL];
+
+	va_list args;
+	va_start(args, val);
+	vsnprintf(buff, COMM_COMMAND_VAL, val, args);
+	va_end(args);
+
+
 	Serial.print("");
 	Serial.print(key);
 	Serial.print(":");
-	Serial.print(val);
+	Serial.print(buff);
 	Serial.println();
+}
+
+void Comm::sendError(const char* value, ...)
+{
+	va_list args;
+	va_start(args, value);
+	
+	Comm::sendCommand(COMM_ERROR_STR, value, args);
+
+	va_end(args);
 }
 
 void Comm::resetInputCommand()
