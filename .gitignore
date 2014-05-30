@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+.dep
 
 # Compiled Dynamic libraries
 *.so
@@ -19,3 +20,4 @@
 *.exe
 *.out
 *.app
+*.hex
