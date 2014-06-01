@@ -127,7 +127,6 @@ public class SerialModel {
 	public void setPortName(String portName) {
 		String oldValue = this.portName;
 		
-		System.out.println(portName);
 		this.portName = portName;
 		
 		pcs.firePropertyChange("portName", oldValue, portName);
@@ -139,9 +138,7 @@ public class SerialModel {
 
 	public void setBauds(int bauds) {
 		int oldValue = bauds;
-		
-		System.out.println(bauds);
-		
+
 		this.bauds = bauds;
 		
 		pcs.firePropertyChange("bauds", oldValue, bauds);
