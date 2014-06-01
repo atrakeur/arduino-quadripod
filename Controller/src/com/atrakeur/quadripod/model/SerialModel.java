@@ -1,5 +1,8 @@
 package com.atrakeur.quadripod.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -10,6 +13,8 @@ public class SerialModel {
 	private int bauds;
 	
 	private SerialPort port;
+	
+	private PropertyChangeSupport pcs;
 	
 	public SerialModel() {
 		this(9600);
@@ -24,11 +29,15 @@ public class SerialModel {
 		} else {
 			portName = "";
 		}
+		
+		this.pcs = new PropertyChangeSupport(this);
 	}
 	
 	public SerialModel(String portName, int bauds) {
 		this.portName = portName;
 		this.bauds = bauds;
+		
+		this.pcs = new PropertyChangeSupport(this);
 	}
 	
 	public String[] availablePorts() {
@@ -50,6 +59,8 @@ public class SerialModel {
                                  SerialPort.DATABITS_8,
                                  SerialPort.STOPBITS_1,
                                  SerialPort.PARITY_NONE);
+		
+		pcs.firePropertyChange("connected", false, true);
 	}
 	
 	public void disconnect() throws SerialPortException {
@@ -59,6 +70,8 @@ public class SerialModel {
 		
 		port.closePort();
 		port = null;
+		
+		pcs.firePropertyChange("connected", true, false);
 	}
 	
 	public void write(String str) throws SerialPortException {
@@ -105,6 +118,41 @@ public class SerialModel {
 		}
 		
 		return null;
+	}
+
+	public String getPortName() {
+		return portName;
+	}
+
+	public void setPortName(String portName) {
+		String oldValue = this.portName;
+		
+		System.out.println(portName);
+		this.portName = portName;
+		
+		pcs.firePropertyChange("portName", oldValue, portName);
+	}
+
+	public int getBauds() {
+		return bauds;
+	}
+
+	public void setBauds(int bauds) {
+		int oldValue = bauds;
+		
+		System.out.println(bauds);
+		
+		this.bauds = bauds;
+		
+		pcs.firePropertyChange("bauds", oldValue, bauds);
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		pcs.addPropertyChangeListener(listener);
+	}
+	
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		pcs.removePropertyChangeListener(listener);
 	}
 
 }

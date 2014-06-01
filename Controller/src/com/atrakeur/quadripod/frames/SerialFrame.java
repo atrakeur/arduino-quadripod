@@ -6,18 +6,25 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import jssc.SerialPortException;
 
 import com.atrakeur.quadripod.Application;
 import com.atrakeur.quadripod.model.SerialModel;
 import com.atrakeur.quadripod.utils.GBCWrapper;
 
-public class SerialFrame extends JFrame {
+public class SerialFrame extends JFrame implements PropertyChangeListener {
 	
 	public static final String LBLSTATUS_NO_CONNECTION = "Not connected";
 	public static final String LBLSTATUS_CONNECTED = "Connected";
@@ -48,6 +55,7 @@ public class SerialFrame extends JFrame {
 		
 		createComponents();
 		placeComponents();
+		updateProperties();
 		createController();
 		
 		pack();
@@ -58,11 +66,10 @@ public class SerialFrame extends JFrame {
 		btnConnect = new JButton(BTNCONNECT_CONNECT);
 		
 		lblPort = new JLabel("Port: ");
-		cmdPort = new JComboBox<>(model.availablePorts());
+		cmdPort = new JComboBox<>();
 		
 		lblBauds = new JLabel("Bauds: ");
-		cmdBauds = new JComboBox<>(CMDBAUDS_VALUES);
-		cmdBauds.setSelectedIndex(CMDBAUDS_DEFAULT);
+		cmdBauds = new JComboBox<>();
 		
 		cmdClose = new JButton("Close");
 	}
@@ -85,11 +92,76 @@ public class SerialFrame extends JFrame {
 	}
 	
 	private void createController() {
+		this.addComponentListener(new ComponentAdapter() {
+			public void componentShown(ComponentEvent e) {
+				model.addPropertyChangeListener(SerialFrame.this);
+			}
+			
+			public void componentHidden(ComponentEvent e) 
+			{
+				model.removePropertyChangeListener(SerialFrame.this);
+			}
+		});
+		
 		cmdClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SerialFrame.this.setVisible(false);
 			}
 		});
+		
+		btnConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					if (model.isConnected()) {
+							model.disconnect();
+					} else {
+						model.connect();
+					}
+				} catch (SerialPortException e) {
+					JOptionPane.showMessageDialog(SerialFrame.this, e.toString(), 
+								"Exception Occurred", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		cmdPort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.setPortName(cmdPort.getItemAt(cmdPort.getSelectedIndex()));
+			}
+		});
+		
+		cmdBauds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.setBauds(cmdBauds.getItemAt(cmdBauds.getSelectedIndex()));
+			}
+		});
+	}
+	
+	public void updateProperties() {
+		if (model.isConnected()) {
+			lblStatus.setText(LBLSTATUS_CONNECTED);
+			btnConnect.setText(BTNCONNECT_DISCONNECT);
+		} else {
+			lblStatus.setText(LBLSTATUS_NO_CONNECTION);
+			btnConnect.setText(BTNCONNECT_CONNECT);
+		}
+		
+		cmdPort.removeAllItems();
+		for (String port: model.availablePorts()) {
+			cmdPort.addItem(port);
+		}
+		cmdPort.setSelectedItem(model.getPortName());
+		
+		cmdBauds.removeAllItems();
+		for (Integer baud: CMDBAUDS_VALUES) {
+			cmdBauds.addItem(baud);
+		}
+		cmdBauds.setSelectedItem(model.getBauds());
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		updateProperties();
 	}
 
 }
