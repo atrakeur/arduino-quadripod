@@ -2,10 +2,16 @@ package com.atrakeur.quadripod.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.atrakeur.quadripod.Application;
@@ -22,6 +28,9 @@ public class MainFrame extends JFrame {
 	private JPanel blArm;
 	private JPanel brArm;
 	
+	private JMenuItem itmQuit;
+	private JMenuItem itmSerial;
+	
 	public MainFrame(Application app) {
 		this.app = app;
 		
@@ -34,14 +43,24 @@ public class MainFrame extends JFrame {
 
 	private void createComponents() {
 		robotDisplay = new JPanel();
+		robotDisplay.setPreferredSize(new Dimension(200, 300));
 		
 		flArm = new JPanel();
-		
 		frArm = new JPanel();
-		
 		blArm = new JPanel();
-		
 		brArm = new JPanel();
+		
+		JMenuBar menuBar = new JMenuBar(); {
+			JMenu menu = new JMenu("File"); {
+				itmQuit = new JMenuItem("Quit");
+				menu.add(itmQuit);
+			} menuBar.add(menu);
+			
+			menu = new JMenu("Parameters"); {
+				itmSerial = new JMenuItem("Serial");
+				menu.add(itmSerial);
+			} menuBar.add(menu);
+		} this.setJMenuBar(menuBar);
 	}
 
 	private void placeComponents() {
@@ -54,13 +73,22 @@ public class MainFrame extends JFrame {
 			p.add(blArm, new GBCWrapper(0, 1).fill(GridBagConstraints.BOTH).weight(1, 1));
 			p.add(brArm, new GBCWrapper(2, 1).fill(GridBagConstraints.BOTH).weight(1, 1));
 		}
-		p.setBackground(Color.black);
 		add(p);
 	}
 	
 	private void createController() {
-		// TODO Auto-generated method stub
-		
+		itmSerial.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (!app.hasSubFrameType(SerialFrame.class)) {
+					SerialFrame newFrame = new SerialFrame(app);
+					app.registerSubFrame(newFrame);
+					newFrame.setVisible(true);
+				} else {
+					app.getFrame(SerialFrame.class).toFront();
+					app.getFrame(SerialFrame.class).requestFocus();
+				}
+			}
+		});
 	}
 
 }
