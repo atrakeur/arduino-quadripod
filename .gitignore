@@ -21,3 +21,7 @@
 *.out
 *.app
 *.hex
+
+# Controller files
+Controller/bin
+Controller/lib/javadoc
