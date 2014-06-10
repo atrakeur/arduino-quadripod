@@ -133,7 +133,9 @@ public class SerialFrame extends JFrame implements PropertyChangeListener {
 		
 		cmdBauds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.setBauds(cmdBauds.getItemAt(cmdBauds.getSelectedIndex()));
+				if (cmdBauds.getItemAt(cmdBauds.getSelectedIndex()) != null) {
+					model.setBauds(cmdBauds.getItemAt(cmdBauds.getSelectedIndex()));
+				}
 			}
 		});
 	}

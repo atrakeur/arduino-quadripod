@@ -40,7 +40,7 @@ void Controller::defineArm(int armPos, const int armData[6])
 	this->comm->sendCommand("Controller@defineArm", "%d [%d, %d]", armData[1], armData[4], armData[5]);
 }
 
-void Controller::setXPosition(int armPos, int position)
+void Controller::setVPosition(int armPos, int position)
 {
 	if (armPos >= CONTROLLER_ARM_COUNT) 
 	{
@@ -54,17 +54,14 @@ void Controller::setXPosition(int armPos, int position)
 		return;	
 	}
 
-	if (position == CONTROLLER_ARMX_UP) 
+	float percent = (float)position / 100.0f;
+	if (percent >= 0.0f && percent <= 100.0f) 
 	{
-		this->arms[armPos].servoX.writeMicroseconds(this->arms[armPos].limits[0]);
-		this->comm->sendCommand("Controller@setXPosition", "%d [%d, %d]", armPos, position, this->arms[armPos].limits[0]);
-	}
-	else if (position == CONTROLLER_ARMX_DOWN) 
-	{
-		this->arms[armPos].servoX.writeMicroseconds(this->arms[armPos].limits[1]);
-		this->comm->sendCommand("Controller@setXPosition", "%d [%d, %d]", armPos, position, this->arms[armPos].limits[1]);
-	}
-	else
+		int msec = (this->arms[armPos].limits[1] - this->arms[armPos].limits[0]) * percent + this->arms[armPos].limits[0];
+		this->arms[armPos].servoX.writeMicroseconds(msec);
+		this->comm->sendCommand("Controller@setVPosition", "%u %u", armPos, position);
+	} 
+	else 
 	{
 		this->comm->sendError(COMM_ERROR_ARM_WRONGPOS, armPos, position);
 	}

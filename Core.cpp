@@ -23,7 +23,7 @@ void Core::init()
 	for (int i = 0; i < CONTROLLER_ARM_COUNT; i++) 
 	{
 		control.defineArm(i, armConfig[i]);
-		control.setXPosition(i, CONTROLLER_ARMX_DOWN);
+		control.setVPosition(i, CONTROLLER_ARMX_DOWN);
 	}
 }
 
@@ -38,13 +38,13 @@ void Core::loop()
 
 void Core::parseControlCommand(Command* cmd) 
 {
-	if (strcmp(cmd->key, "Controller@setXPosition") == 0)
+	if (strcmp(cmd->key, "Controller@setVPosition") == 0)
 	{
 		unsigned int armdId;
 		unsigned int position;
 		if (sscanf(cmd->val, "%u %u", &armdId, &position))
 		{
-			control.setXPosition(armdId, position);
+			control.setVPosition(armdId, position);
 		}
 	}
 }

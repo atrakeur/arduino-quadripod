@@ -76,8 +76,12 @@ public class SerialModel {
 	
 	public void write(String str) throws SerialPortException {
 		if (!isConnected()) {
-			throw new SerialPortException(port.getPortName(), "write", "SerialCom not connected");
+			throw new SerialPortException("NoPort", "write", "SerialCom not connected");
 		}
+
+		/*if (str != null) {
+			System.out.println("-> " + str);
+		}*/
 		
 		port.writeString(str);
 	}
@@ -87,10 +91,16 @@ public class SerialModel {
 			throw new SerialPortException(port.getPortName(), "write", "SerialCom not connected");
 		}
 		
-		return port.readString();
+		String str = port.readString();
+		
+		/*if (str != null) {
+			System.out.println("-> " + str);
+		}*/
+		
+		return str;
 	}
 	
-	public String read(int timeout) throws SerialPortException, InterruptedException {
+	public String read(int timeout) throws SerialPortException {
 		if (!isConnected()) {
 			throw new SerialPortException(port.getPortName(), "write", "SerialCom not connected");
 		}
@@ -109,8 +119,6 @@ public class SerialModel {
 			if (buff != null) {
 				retVal.append(buff);
 			}
-			
-			Thread.sleep(1);
 		}
 		
 		if (retVal.length() > 0) {

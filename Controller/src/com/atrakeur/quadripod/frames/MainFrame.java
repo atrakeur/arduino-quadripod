@@ -15,6 +15,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.atrakeur.quadripod.Application;
+import com.atrakeur.quadripod.frames.panels.ArmPanel;
+import com.atrakeur.quadripod.model.CoreModel;
 import com.atrakeur.quadripod.utils.GBCWrapper;
 
 
@@ -23,10 +25,10 @@ public class MainFrame extends JFrame {
 	Application app;
 	
 	private JPanel robotDisplay;
-	private JPanel flArm;
-	private JPanel frArm;
-	private JPanel blArm;
-	private JPanel brArm;
+	private ArmPanel flArm;
+	private ArmPanel frArm;
+	private ArmPanel blArm;
+	private ArmPanel brArm;
 	
 	private JMenuItem itmQuit;
 	private JMenuItem itmSerial;
@@ -45,10 +47,10 @@ public class MainFrame extends JFrame {
 		robotDisplay = new JPanel();
 		robotDisplay.setPreferredSize(new Dimension(200, 300));
 		
-		flArm = new JPanel();
-		frArm = new JPanel();
-		blArm = new JPanel();
-		brArm = new JPanel();
+		flArm = new ArmPanel(app, CoreModel.ArmPosition.FLARM);
+		frArm = new ArmPanel(app, CoreModel.ArmPosition.FRARM);
+		blArm = new ArmPanel(app, CoreModel.ArmPosition.BLARM);
+		brArm = new ArmPanel(app, CoreModel.ArmPosition.BRARM);
 		
 		JMenuBar menuBar = new JMenuBar(); {
 			JMenu menu = new JMenu("File"); {

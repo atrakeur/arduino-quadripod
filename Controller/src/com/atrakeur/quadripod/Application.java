@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 
 import com.atrakeur.quadripod.frames.MainFrame;
 import com.atrakeur.quadripod.frames.SerialFrame;
+import com.atrakeur.quadripod.model.CoreModel;
 import com.atrakeur.quadripod.model.SerialModel;
 
 public class Application {
@@ -16,13 +17,16 @@ public class Application {
 	private final MainFrame mainFrame;
 	private final HashMap<Class<? extends JFrame>, Object> subFrames;
 
+	private final CoreModel coreModel;
 	private final SerialModel serialModel;
 	
 	public Application() {
+		serialModel = new SerialModel();
+		coreModel = new CoreModel(this);
+
+		
 		mainFrame = new MainFrame(this);
 		subFrames = new HashMap<>();
-		
-		serialModel = new SerialModel();
 		
 		mainFrame.setVisible(true);
 	}
@@ -69,6 +73,10 @@ public class Application {
 	
 	public SerialModel getSerialModel() {
 		return serialModel;
+	}
+	
+	public CoreModel getCoreModel() {
+		return coreModel;
 	}
 	
 	public static void main(String[] args) {

@@ -34,7 +34,7 @@ public:
 	void init(Comm* comm);
     void defineArm(int armPos, const int armData[6]);
 
-    void setXPosition(int armPos, int position);
+    void setVPosition(int armPos, int position);
 };
 
 #endif // CONTROLLER_H_INCLUDED
