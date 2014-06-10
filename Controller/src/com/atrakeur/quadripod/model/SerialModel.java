@@ -125,6 +125,10 @@ public class SerialModel {
 	}
 
 	public void setPortName(String portName) {
+		if (isConnected()) {
+			throw new IllegalStateException("Serial port must be disconnected before changing name");
+		}
+		
 		String oldValue = this.portName;
 		
 		this.portName = portName;
@@ -137,6 +141,10 @@ public class SerialModel {
 	}
 
 	public void setBauds(int bauds) {
+		if (isConnected()) {
+			throw new IllegalStateException("Serial port must be disconnected before changing baudrate");
+		}
+		
 		int oldValue = bauds;
 
 		this.bauds = bauds;

@@ -67,11 +67,24 @@ public class SerialFrame extends JFrame implements PropertyChangeListener {
 		
 		lblPort = new JLabel("Port: ");
 		cmdPort = new JComboBox<>();
+		for (String port: model.availablePorts()) {
+			cmdPort.addItem(port);
+			if (port.equals(model.getPortName())) {
+				cmdPort.setSelectedItem(port);
+			}
+		}
 		
 		lblBauds = new JLabel("Bauds: ");
 		cmdBauds = new JComboBox<>();
+		for (Integer baud: CMDBAUDS_VALUES) {
+			cmdBauds.addItem(baud);
+			if (baud == model.getBauds()) {
+				cmdBauds.setSelectedItem(baud);
+			}
+		}
 		
 		cmdClose = new JButton("Close");
+		
 	}
 
 	private void placeComponents() {
@@ -127,14 +140,26 @@ public class SerialFrame extends JFrame implements PropertyChangeListener {
 		
 		cmdPort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.setPortName(cmdPort.getItemAt(cmdPort.getSelectedIndex()));
+				try {
+					model.setPortName(cmdPort.getItemAt(cmdPort.getSelectedIndex()));
+				} catch (IllegalStateException ex) {
+					JOptionPane.showMessageDialog(SerialFrame.this, ex.toString(), 
+								"Exception Occurred", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+				}
 			}
 		});
 		
 		cmdBauds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cmdBauds.getItemAt(cmdBauds.getSelectedIndex()) != null) {
-					model.setBauds(cmdBauds.getItemAt(cmdBauds.getSelectedIndex()));
+				try {
+					if (cmdBauds.getItemAt(cmdBauds.getSelectedIndex()) != null) {
+						model.setBauds(cmdBauds.getItemAt(cmdBauds.getSelectedIndex()));
+					}
+				} catch (IllegalStateException ex) {
+					JOptionPane.showMessageDialog(SerialFrame.this, ex.toString(), 
+								"Exception Occurred", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -147,23 +172,6 @@ public class SerialFrame extends JFrame implements PropertyChangeListener {
 		} else {
 			lblStatus.setText(LBLSTATUS_NO_CONNECTION);
 			btnConnect.setText(BTNCONNECT_CONNECT);
-		}
-		
-		//cmdPort.removeAllItems();
-		for (String port: model.availablePorts()) {
-			cmdPort.addItem(port);
-			if (port.equals(model.getPortName())) {
-				cmdPort.setSelectedItem(port);
-			}
-		}
-		
-		cmdBauds.removeAllItems();
-		for (Integer baud: CMDBAUDS_VALUES) {
-			cmdBauds.addItem(baud);
-			if (baud == model.getBauds()) {
-				System.out.println("Eq for "+baud+" "+model.getBauds());
-				cmdBauds.setSelectedItem(baud);
-			}
 		}
 	}
 
