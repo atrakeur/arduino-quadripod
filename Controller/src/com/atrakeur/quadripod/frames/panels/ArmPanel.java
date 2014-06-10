@@ -7,12 +7,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jssc.SerialPortException;
+
 import com.atrakeur.quadripod.Application;
+import com.atrakeur.quadripod.frames.SerialFrame;
 import com.atrakeur.quadripod.model.ArmModel;
 import com.atrakeur.quadripod.model.CoreModel.ArmPosition;
 import com.atrakeur.quadripod.utils.GBCWrapper;
@@ -74,13 +78,25 @@ public class ArmPanel extends JPanel{
 		
 		verticalPosition.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				model.setVerticalPosition(verticalPosition.getValue());
+				try {
+					model.setVerticalPosition(verticalPosition.getValue());
+				} catch (SerialPortException e) {
+					JOptionPane.showMessageDialog(ArmPanel.this, e.toString(), 
+							"Exception Occurred", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
 			}
 		});
 		
 		horizontalPosition.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				model.setHorizontalPosition(horizontalPosition.getValue());
+				try {
+					model.setHorizontalPosition(horizontalPosition.getValue());
+				} catch (SerialPortException e) {
+					JOptionPane.showMessageDialog(ArmPanel.this, e.toString(), 
+							"Exception Occurred", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
 			}
 		});
 	}

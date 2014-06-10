@@ -23,7 +23,6 @@ public class Application {
 	public Application() {
 		serialModel = new SerialModel();
 		coreModel = new CoreModel(this);
-
 		
 		mainFrame = new MainFrame(this);
 		subFrames = new HashMap<>();

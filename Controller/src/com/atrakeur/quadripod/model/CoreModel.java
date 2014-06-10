@@ -37,7 +37,7 @@ public class CoreModel {
 		
 		this.arms         = new ArmModel[ArmPosition.values().length];
 		for (int i = 0; i < ArmPosition.values().length; i++) {
-			arms[i] = new ArmModel(app, ArmPosition.values()[i]);
+			arms[i] = new ArmModel(this, ArmPosition.values()[i]);
 		}
 		
 		bindThreadToSerial();
@@ -49,6 +49,10 @@ public class CoreModel {
 	
 	public ArmModel getArm(ArmPosition pos) {
 		return getArm(pos.ordinal());
+	}
+	
+	public synchronized void sendCommand(String command) throws SerialPortException {
+		app.getSerialModel().write(command);
 	}
 	
 	/**
@@ -72,7 +76,9 @@ public class CoreModel {
 	 * @param key
 	 * @param value
 	 */
-	public synchronized void addCommand(final String key, final String value) {
+	public synchronized void addCommand(final String key, String value) {
+		value = value.trim();
+		
 		final String oldValue = this.lastCommands.get(key);
 		final String newValue = value;
 		
