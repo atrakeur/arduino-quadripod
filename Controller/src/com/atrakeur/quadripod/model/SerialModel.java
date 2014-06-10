@@ -55,7 +55,7 @@ public class SerialModel {
 		
 		port = new SerialPort(portName);
 		port.openPort();//Open serial port
-		port.setParams(SerialPort.BAUDRATE_9600, 
+		port.setParams(bauds, 
                                  SerialPort.DATABITS_8,
                                  SerialPort.STOPBITS_1,
                                  SerialPort.PARITY_NONE);

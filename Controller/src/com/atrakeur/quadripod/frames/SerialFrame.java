@@ -149,17 +149,22 @@ public class SerialFrame extends JFrame implements PropertyChangeListener {
 			btnConnect.setText(BTNCONNECT_CONNECT);
 		}
 		
-		cmdPort.removeAllItems();
+		//cmdPort.removeAllItems();
 		for (String port: model.availablePorts()) {
 			cmdPort.addItem(port);
+			if (port.equals(model.getPortName())) {
+				cmdPort.setSelectedItem(port);
+			}
 		}
-		cmdPort.setSelectedItem(model.getPortName());
 		
 		cmdBauds.removeAllItems();
 		for (Integer baud: CMDBAUDS_VALUES) {
 			cmdBauds.addItem(baud);
+			if (baud == model.getBauds()) {
+				System.out.println("Eq for "+baud+" "+model.getBauds());
+				cmdBauds.setSelectedItem(baud);
+			}
 		}
-		cmdBauds.setSelectedItem(model.getBauds());
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
