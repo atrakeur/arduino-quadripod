@@ -50,7 +50,7 @@ public class SerialModel {
 
 	public void connect() throws SerialPortException {
 		if (isConnected()) {
-			throw new SerialPortException(portName, "connect", "SerialCom allready connected");
+			throw new SerialPortException("NoPort", "connect", "SerialCom allready connected");
 		}
 		
 		port = new SerialPort(portName);
@@ -65,7 +65,7 @@ public class SerialModel {
 	
 	public void disconnect() throws SerialPortException {
 		if (!isConnected()) {
-			throw new SerialPortException(port.getPortName(), "disconnect", "SerialCom not connected");
+			throw new SerialPortException("NoPort", "disconnect", "SerialCom not connected");
 		}
 		
 		port.closePort();
@@ -84,7 +84,7 @@ public class SerialModel {
 	
 	public String read() throws SerialPortException {
 		if (!isConnected()) {
-			throw new SerialPortException(port.getPortName(), "write", "SerialCom not connected");
+			throw new SerialPortException("NoPort", "read", "SerialCom not connected");
 		}
 		
 		String str = port.readString();
@@ -94,7 +94,7 @@ public class SerialModel {
 	
 	public String read(int timeout) throws SerialPortException {
 		if (!isConnected()) {
-			throw new SerialPortException(port.getPortName(), "write", "SerialCom not connected");
+			throw new SerialPortException("NoPort", "read", "SerialCom not connected");
 		}
 		
 		if (timeout < 10) {

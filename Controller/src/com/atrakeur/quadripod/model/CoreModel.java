@@ -33,7 +33,6 @@ public class CoreModel {
 		this.pcs = new PropertyChangeSupport(this);
 		
 		this.lastCommands = new HashMap<String, String>();
-		this.thread       = new SerialCommandThread(app.getSerialModel(), this);
 		
 		this.arms         = new ArmModel[ArmPosition.values().length];
 		for (int i = 0; i < ArmPosition.values().length; i++) {
@@ -117,6 +116,7 @@ public class CoreModel {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("connected")) {
 					if (arg0.getOldValue().equals(Boolean.FALSE) && arg0.getNewValue().equals(Boolean.TRUE)) {
+						thread = new SerialCommandThread(app.getSerialModel(), CoreModel.this);
 						thread.start();
 					}
 					if (arg0.getOldValue().equals(Boolean.TRUE) && arg0.getNewValue().equals(Boolean.FALSE)) {
