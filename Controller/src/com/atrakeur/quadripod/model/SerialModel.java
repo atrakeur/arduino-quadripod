@@ -79,6 +79,10 @@ public class SerialModel {
 			throw new SerialPortException("NoPort", "write", "SerialCom not connected");
 		}
 		
+		if (str != null) {
+			System.out.println("Write: "+str);
+		}
+		
 		port.writeString(str);
 	}
 	
@@ -88,6 +92,10 @@ public class SerialModel {
 		}
 		
 		String str = port.readString();
+		
+		if (str != null) {
+			System.out.println("Read: "+str);
+		}
 		
 		return str;
 	}

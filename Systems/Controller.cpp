@@ -66,3 +66,30 @@ void Controller::setVPosition(int armPos, int position)
 		this->comm->sendError(COMM_ERROR_ARM_WRONGPOS, armPos, position);
 	}
 }
+
+void Controller::setHPosition(int armPos, int position)
+{
+	if (armPos >= CONTROLLER_ARM_COUNT) 
+	{
+		this->comm->sendError(COMM_ERROR_ARM_COUNT, armPos, CONTROLLER_ARM_COUNT);
+		return;
+	}
+
+	if (this->arms[armPos].defined != 1)
+	{
+		this->comm->sendError(COMM_ERROR_ARM_NOTDEFINED, armPos);
+		return;	
+	}
+
+	float percent = (float)position / 100.0f;
+	if (percent >= 0.0f && percent <= 100.0f) 
+	{
+		int msec = (this->arms[armPos].limits[3] - this->arms[armPos].limits[2]) * percent + this->arms[armPos].limits[2];
+		this->arms[armPos].servoY.writeMicroseconds(msec);
+		this->comm->sendCommand("Controller@setHPosition", "%u %u", armPos, position);
+	} 
+	else 
+	{
+		this->comm->sendError(COMM_ERROR_ARM_WRONGPOS, armPos, position);
+	}
+}

@@ -47,4 +47,13 @@ void Core::parseControlCommand(Command* cmd)
 			control.setVPosition(armdId, position);
 		}
 	}
+	else if (strcmp(cmd->key, "Controller@setHPosition") == 0)
+	{
+		unsigned int armdId;
+		unsigned int position;
+		if (sscanf(cmd->val, "%u %u", &armdId, &position))
+		{
+			control.setHPosition(armdId, position);
+		}
+	}
 }

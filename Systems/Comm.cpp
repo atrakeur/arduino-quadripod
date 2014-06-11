@@ -32,7 +32,6 @@ Command* Comm::recvCommand()
 		}
 
 		char data = (char)Serial.read();
-		Serial.print(data);
 
 		if (data == '\n' || data == '\r') 
 		{
@@ -59,12 +58,6 @@ Command* Comm::recvCommand()
 			input.key[delimiter] = '\0';
 			strncpy(input.val, &inputBuff[delimiter + 1], inputUsed - delimiter - 1);
 			input.val[inputUsed - delimiter - 1] = '\0';
-
-			Serial.print("Received: '");
-			Serial.print(input.key);
-			Serial.print("' with '");
-			Serial.print(input.val);
-			Serial.println("' Done");
 
 			Comm::resetInputCommand();
 			
